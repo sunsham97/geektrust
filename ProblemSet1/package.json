@@ -1,0 +1,12 @@
+{
+  "name": "problemset1",
+  "version": "1.0.0",
+  "description": "geektrust problem statement 1",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Saksham Agrawal",
+  "license": "ISC"
+}
