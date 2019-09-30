@@ -1,19 +1,24 @@
+// module imports
 const fs = require('fs');
 // family registry
 const family = [];
 // member definition
 class Person {
     // class variables
-    name = "";
-    gender = ""
-    spouse =  null;
-    parent = null;
-    children = [];
+    // below declarations work in the latest node version
+    // name = '';
+    // gender = '';
+    // spouse =  null;
+    // parent = null;
+    // children = [];
+
     // class methods
     constructor(name,gender,parent=null) {
         this.name = name;
         this.gender = gender;
         this.parent = parent;
+        this.spouse = null;
+        this.children = [];
     }
     static addChildren(root,motherName,childName,childGender) {
         let mother = findFamilyMember(motherName);
@@ -133,30 +138,31 @@ function findFamilyMember(name) {
     return null;
 }
 
+console.log('----------------------- FAMILY TREE SETUP START -----------------------');
+
 const root = new Person('Shan','Male');
 family.push(root);
 
-// root.spouse = new Person('Anga','Female');
-
-// root.spouse.spouse = root;
-// family.push(root.spouse);
-
-// Shan married Anga
+// Shan marries Anga
 Person.addSpouse('Shan','Anga');
-
 // Shan and Anga's Children and their spouses
 Person.addChildren(root,'Anga','Chit','Male');
+// Chit marries Amba
 Person.addSpouse('Chit','Amba');
 Person.addChildren(root,'Anga','Ish','Male');
 Person.addChildren(root,'Anga','Vich','Male');
+// Vich marries Lika
 Person.addSpouse('Vich','Lika');
 Person.addChildren(root,'Anga','Aras','Male');
+// Aras marries Chitra
 Person.addSpouse('Aras','Chitra');
 Person.addChildren(root,'Anga','Satya','Female');
+// Satya marries Vyan
 Person.addSpouse('Satya','Vyan');
 
 // Chit and Amba's children and their spouses
 Person.addChildren(root,'Amba','Dritha','Female')
+// Dritha marries Jaya
 Person.addSpouse('Dritha','Jaya');
 Person.addChildren(root,'Amba','Tritha','Female');
 Person.addChildren(root,'Amba','Vritha','Male');
@@ -170,6 +176,7 @@ Person.addChildren(root,'Lika','Chika','Female');
 
 // Aras and Chitra's children and their spouses
 Person.addChildren(root,'Chitra','Jnki','Female');
+// Jnki marries Arit
 Person.addSpouse('Jnki','Arit');
 Person.addChildren(root,'Chitra','Ahit','Male');
 
@@ -179,12 +186,13 @@ Person.addChildren(root,'Jnki','Lavnya','Female');
 
 // Satya and Vyan's children and their spouses
 Person.addChildren(root,'Satya','Asva','Male');
+// Asva marries Satvy
 Person.addSpouse('Asva','Satvy');
-
 // Asva and Satvy's children
 Person.addChildren(root,'Satvy','Vasa','Male');
 
 Person.addChildren(root,'Satya','Vyas','Male');
+// Vyas marries Krpi
 Person.addSpouse('Vyas','Krpi');
 
 // Vyas and Krpi's children
@@ -192,9 +200,18 @@ Person.addChildren(root,'Krpi','Kriya','Male');
 Person.addChildren(root,'Krpi','Krithi','Female');
 
 Person.addChildren(root,'Satya','Atya','Female');
-// console.log('--------------');
-// Person.getRelationship('Lavnya','Maternal-Uncle');
+console.log('----------------------- FAMILY TREE SETUP END -----------------------');
 
-// console.log(family);
-let input = fs.readFileSync('input.txt');
-console.log(input.toString().split("\r\n"));
+let commands = fs.readFileSync('input.txt').toString().split("\r\n");
+console.log('----------------------- OUTPUT OF INPUT.TXT FILE -----------------------');
+for (let command of commands) {
+    let args = command.split(" ");
+    if(args[0] === 'ADD_CHILD') {
+        Person.addChildren(root,...args.slice(1));
+    }
+    else if(args[0] === 'GET_RELATIONSHIP') {
+        Person.getRelationship(...args.slice(1));
+    }
+    else console.log("invalid command");
+}
+console.log('----------------------- END -----------------------');
